@@ -19,7 +19,13 @@ public class CustomerServicesImpl implements CustomerServices {
     @Override
     public SortedSet<Customer> getCustomersOrderedByEmail(
             Iterable<Customer> customers, SortOrder sortOrder) {
-        // TODO Auto-generated method stub
+        switch(sortOrder) {
+            case ASC:
+                break;
+            case DESC:
+                break;
+            default:
+        }
         return null;
     }
 
