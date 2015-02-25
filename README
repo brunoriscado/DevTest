@@ -1,0 +1,51 @@
+Senior Java Developer Test
+
+Overview
+
+Welcome to the North Plains Senior Java Developer Test. 
+
+This test is intended to discover your ability to code to a provided specification, tests your ability to call methods concurrently / asynchronously for long running tasks, and use a third party API.
+
+You are welcome to use any third party library for any task you wish, but they should be appropriate and suitable. Assume that this code is to be used in a production environment. You will not gain marks for doing something by hand for which a common library exists, but you may lose marks for using a large and heavyweight API for something simple. 
+
+Once completed, you should either publish your work on GitHub or similar online code repository, or email a zip.
+Zips or GitHub urls should be sent to: wferguson@northplains.com
+
+The Tasks
+
+You have been provided with an outline of a Java project in the form of interfaces that need implementing, as well as a JSON file representing a customer list. 
+
+You should first complete the model classes and implement the 2 service interfaces. Once done you should code the tasks defined in the main class.
+
+We are expecting readable code, appropriately commented, with unit tests. 
+
+Model Classes
+
+Customer, Friend, Name and SortOrder have been completed for you. You will need to implement both Address, and EyeColour as you see fit. 
+
+Service Classes
+
+You will need to implement the 2 interfaces described below.
+
+ModelLoader - Defines the reading / writing of the JSON file. You should implement this interface using any third party library you wish (or by hand should you prefer). The 2 methods should be self explanatory.
+
+CustomerServices - Defines service methods for working with Customers. 
+
+getCustomersByEyeColour - this should return the customers that have the specified eye colour. 
+getCustomersOrderedByEmail - this should sort the customers by email.
+lookupAddress - given a long / lat coordinate, this should use the Google Geocoding API to determine the Address for each Customer. To use the Geocoding API you will need to obtain an API key from google. See below for details: https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
+findClosestCustomer - This should determine which of the customers are closest to the given customer. Note - we are not looking for the absolute distance. DO NOT use a third party API. 
+
+Main Method Tasks
+
+These can be completed in any way you wish using any number of additional methods / classes etc, but you must use the methods you have implemented in the service classes to perform the core logic
+
+Load the data into an in memory collection using the ModelLoader.
+Determine and output which eye colour is the most popular
+Output all email addresses sorted alphabetically in ascending order
+Using the provided ExecutorService or other form of concurrency, populate the Address field of each customer. As this is a long running task, we expect some form of parallelism. 
+Using the above ExecutorService or other form of concurrency, determine which 2 Customers live closest to each other.
+Using the ModuleLoader, write the Customer list back to JSON, including the new Address information
+
+
+
