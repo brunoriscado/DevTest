@@ -63,10 +63,14 @@ public class Main {
                         "Last name: " + customer.getName().getLast() + " | " +
                         "Email Address: " + customer.getEmail()));
 
-        //TODO - test request
-        double lat = 49.1214842;
-        double lng = -55.3500208;
-        Address address = customerServices.lookupAddress(lat, lng);
+
+
+        //TODO - REMOVE
+//        double lat = 49.1214842;
+//        double lng = -55.3500208;
+//        Address address = customerServices.lookupAddress(lat, lng);
+
+
 
         //4 - Using the above ExecutorService or other form of concurrency, populate the Address field of each customer.
         //    As this is a long running task, we expect some form of parallelism.
