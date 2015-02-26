@@ -30,6 +30,7 @@ public class GeocodingAPIHandler {
         HttpsURLConnection connection = null;
         BufferedReader responseReader = null;
         try {
+            LOGGER.log(Level.INFO, "Performing reverse geocoding address lookup request: {0}", coordenatesURL);
             url = new URL(coordenatesURL);
             connection = (HttpsURLConnection)url.openConnection();
             connection.setConnectTimeout(15000);

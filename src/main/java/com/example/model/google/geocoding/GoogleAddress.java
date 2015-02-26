@@ -7,7 +7,7 @@ public class GoogleAddress {
     private String formatted_address;
     private Geometry geometry;
     private String place_id;
-    private List<String> type;
+    private List<String> types;
 
     public List<AddressComponents> getAddress_components() {
         return address_components;
@@ -41,12 +41,12 @@ public class GoogleAddress {
         this.place_id = place_id;
     }
 
-    public List<String> getType() {
-        return type;
+    public List<String> getTypes() {
+        return types;
     }
 
-    public void setType(List<String> type) {
-        this.type = type;
+    public void setTypes(List<String> types) {
+        this.types = types;
     }
 
     public class AddressComponents {

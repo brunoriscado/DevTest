@@ -1,8 +1,7 @@
 package com.example.services;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -16,7 +15,6 @@ import com.example.model.Customer;
 import com.example.model.EyeColour;
 import com.example.model.SortOrder;
 import com.example.model.google.geocoding.GeocodingAPIHandler;
-import com.example.model.google.geocoding.GoogleAddress;
 import com.example.model.google.geocoding.GoogleReverseGeocodingResponse;
 import com.example.utils.Util;
 
@@ -72,16 +70,14 @@ public class CustomerServicesImpl implements CustomerServices {
         GoogleReverseGeocodingResponse response = handler.getAddress(latitude, longitude);
         return mapGoogleAddressToAddress(response);
     }
-    
+
     private Address mapGoogleAddressToAddress(GoogleReverseGeocodingResponse googleAddress) {
         Address address = new Address();
-        Collection c = googleAddress.getResults().stream().map(element -> new AddressDetails(null, element.getFormatted_address())).collect(Collectors.toList());
-//        Collection c = googleAddress.getResults().stream().map(element -> new AddressDetails((List<AddressType>)element.getType().stream()
-//              .map(type -> type != null ? AddressType.getAddressTypeFromType(type) : null).collect(Collectors.toList()),
-//                      element.getFormatted_address())).collect(Collectors.toList());
-//        address.setAddresses(googleAddress.getResults().stream().map(element -> new AddressDetails((List<AddressType>)element.getType().stream()
-//                .map(type -> AddressType.getAddressTypeFromType(type)).collect(Collectors.toList()),
-//                        element.getFormatted_address())).collect(Collectors.toList()));
+        address.setAddresses(googleAddress.getResults().stream().map(element -> new AddressDetails(
+                (List<AddressType>)element.getTypes().stream()
+                        .map(type -> AddressType.getAddressTypeFromType(type)).collect(Collectors.toList()),
+                element.getFormatted_address()))
+                .collect(Collectors.toList()));
         return address;
     }
 
