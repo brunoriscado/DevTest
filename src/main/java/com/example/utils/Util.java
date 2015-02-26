@@ -2,6 +2,8 @@ package com.example.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Util {
 
@@ -11,5 +13,9 @@ public class Util {
             list.add(item);
         }
         return list;
+    }
+    
+    public static <T> Stream<T> getStreamForIterable(Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }
