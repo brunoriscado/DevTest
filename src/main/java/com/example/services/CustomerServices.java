@@ -29,7 +29,7 @@ public interface CustomerServices {
      * @param longitude
      * @return
      */
-    public Address lookupAddress(long latitude, long longitude);
+    public Address lookupAddress(double latitude, double longitude);
 
     /**
      *

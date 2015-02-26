@@ -1,28 +1,37 @@
 package com.example.services;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.example.model.Address;
+import com.example.model.AddressDetails;
+import com.example.model.AddressDetails.AddressType;
 import com.example.model.Customer;
 import com.example.model.EyeColour;
 import com.example.model.SortOrder;
+import com.example.model.google.geocoding.GeocodingAPIHandler;
+import com.example.model.google.geocoding.GoogleAddress;
+import com.example.model.google.geocoding.GoogleReverseGeocodingResponse;
 import com.example.utils.Util;
 
 public class CustomerServicesImpl implements CustomerServices {
 
     private final Logger LOGGER = Logger.getLogger(CustomerServicesImpl.class.getName());
     public static CustomerServicesImpl instance = null;
-
+    private static GeocodingAPIHandler handler;
     private CustomerServicesImpl() {
     }
 
-    public static CustomerServices getInstance() {
+    public static CustomerServices getInstance(String addressLookupURL) {
         if (instance == null) {
             instance = new CustomerServicesImpl();
+            handler = new GeocodingAPIHandler(addressLookupURL);
         }
         return instance;
     }
@@ -30,32 +39,50 @@ public class CustomerServicesImpl implements CustomerServices {
     @Override
     public Iterable<Customer> getCustomersByEyeColour(
             Iterable<Customer> customers, EyeColour eyeColour) {
-        // TODO Auto-generated method stub
-        return null;
+        customers = Util.getStreamForIterable(customers)
+                .filter(customer -> customer.getEyeColor().equals(eyeColour.getColour()))
+                .collect(Collectors.toList());
+        return customers;
     }
 
     @Override
     public SortedSet<Customer> getCustomersOrderedByEmail(
             Iterable<Customer> customers, SortOrder sortOrder) {
         SortedSet<Customer> customersSortedByEmail = null;
+        Comparator<Customer> comparator = null; 
         switch(sortOrder) {
             case ASC:
-                Comparator<Customer> ascEmailComparator = (e1, e2) -> e1.getEmail().compareTo(e2.getEmail());
-                customersSortedByEmail = new TreeSet<Customer>(ascEmailComparator);
-                customersSortedByEmail.addAll(Util.getStreamForIterable(customers).collect(Collectors.toSet()));
-                //customersSortedByEmail.addAll(Util.getStreamForIterable(customers).sorted(ascEmailComparator).collect(Collectors.toSet()));
+                comparator = (e1, e2) -> e1.getEmail().compareTo(e2.getEmail());
+                customersSortedByEmail = new TreeSet<Customer>(comparator);
                 break;
             case DESC:
+                comparator = (e1, e2) -> -(e1.getEmail().compareTo(e2.getEmail()));
                 break;
             default:
+                LOGGER.log(Level.INFO, "Not a sorting option");
+                break;
         }
-        return null;
+        customersSortedByEmail = new TreeSet<Customer>(comparator);
+        customersSortedByEmail.addAll(Util.getStreamForIterable(customers).collect(Collectors.toSet()));
+        return customersSortedByEmail;
     }
 
     @Override
-    public Address lookupAddress(long latitude, long longitude) {
-        // TODO Auto-generated method stub
-        return null;
+    public Address lookupAddress(double latitude, double longitude) {
+        GoogleReverseGeocodingResponse response = handler.getAddress(latitude, longitude);
+        return mapGoogleAddressToAddress(response);
+    }
+    
+    private Address mapGoogleAddressToAddress(GoogleReverseGeocodingResponse googleAddress) {
+        Address address = new Address();
+        Collection c = googleAddress.getResults().stream().map(element -> new AddressDetails(null, element.getFormatted_address())).collect(Collectors.toList());
+//        Collection c = googleAddress.getResults().stream().map(element -> new AddressDetails((List<AddressType>)element.getType().stream()
+//              .map(type -> type != null ? AddressType.getAddressTypeFromType(type) : null).collect(Collectors.toList()),
+//                      element.getFormatted_address())).collect(Collectors.toList());
+//        address.setAddresses(googleAddress.getResults().stream().map(element -> new AddressDetails((List<AddressType>)element.getType().stream()
+//                .map(type -> AddressType.getAddressTypeFromType(type)).collect(Collectors.toList()),
+//                        element.getFormatted_address())).collect(Collectors.toList()));
+        return address;
     }
 
     @Override
