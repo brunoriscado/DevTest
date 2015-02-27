@@ -21,8 +21,8 @@ import com.example.model.Customer;
 import com.example.model.EyeColour;
 import com.example.model.SortOrder;
 import com.example.model.annotations.TaskResource;
-import com.example.model.workers.ClosestCustomersWorker.CustomerPairDistance;
 import com.example.model.workers.ClosestCustomersWorker;
+import com.example.model.workers.ClosestCustomersWorker.CustomerPairDistance;
 import com.example.model.workers.CustomerAddressWorker;
 import com.example.operations.DataOperations;
 import com.example.services.CustomerServices;
@@ -37,7 +37,7 @@ public class Main {
     private static CustomerServices customerServices = null;
     private static ModelLoader loader = null;
     private static ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-    private static final String APP_PROPS_FILE = "app.properties";
+    private static final String APP_PROPS_FILE = "application.properties";
     private static Properties props;
 
     @TaskResource
@@ -129,14 +129,14 @@ public class Main {
      * @throws Exception
      */
     public static void loadConfig() throws Exception {
-        try (FileInputStream fis = new FileInputStream(ModelLoaderImpl.class.getClassLoader().getResource(APP_PROPS_FILE).getFile());) {
+        try (FileInputStream fis = new FileInputStream(System.getProperty("app.config"));) {
             props = new Properties();
             props.load(fis);
             for(Field field : Main.class.getDeclaredFields()) {
                 setField(props, field);
             }
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error reading properties from app properties file");
+            LOGGER.log(Level.WARNING, "Error reading properties file");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, e.getMessage());
         }
