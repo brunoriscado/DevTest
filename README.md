@@ -12,7 +12,9 @@ Notes on the task:
 
 - To build application and run tests: ./gradlew clean build
 
-- To run application: #java -Dapp.config=conf/application.properties -jar build/libs/NorthPlainsDevTest-1.0.jar
+- To run application from command line: java -Dapp.config=conf/application.properties -jar build/libs/NorthPlainsDevTest-1.0.jar
 
-- the output json data is currently configured to output to /tmp/output.json 
+- the output json data with added addresses is currently configured to output to /tmp/output.json
+
+- the rest of the output will be displayed in the standard out
 
