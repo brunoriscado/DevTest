@@ -35,6 +35,11 @@ public class CustomerServicesImpl implements CustomerServices {
         return instance;
     }
 
+    /**
+     * Method that filters the existing Iterable of Customer by EyeColour type
+     * and returns a sub Iterable with the mathing entries
+     * @return Iterable<Customer> - entries filtered by EyeColour
+     */
     @Override
     public Iterable<Customer> getCustomersByEyeColour(
             Iterable<Customer> customers, EyeColour eyeColour) {
@@ -44,6 +49,11 @@ public class CustomerServicesImpl implements CustomerServices {
         return customers;
     }
 
+    /**
+     * Method that implements ordering of Customers By Email address alphabetically
+     * SortOrder can be asceding or descending and the return will be a SortedSet
+     * @return SortedSet - A TreeSet of Customers ordered by email address
+     */
     @Override
     public SortedSet<Customer> getCustomersOrderedByEmail(
             Iterable<Customer> customers, SortOrder sortOrder) {
@@ -66,12 +76,22 @@ public class CustomerServicesImpl implements CustomerServices {
         return customersSortedByEmail;
     }
 
+    /**
+     * Method that calls the Google lookup service handler with a coordenate and maps the response
+     * to a Customer Address, which consists of a list of full addresses, and the corresponding Address Types List
+     * @return Address - the Customer Address
+     */
     @Override
     public Address lookupAddress(double latitude, double longitude) {
         GoogleReverseGeocodingResponse response = handler.getAddress(latitude, longitude);
         return mapGoogleAddressToAddress(response);
     }
 
+    /**
+     * Method where the mapping from Googles lookup response to Customer Address occurs
+     * @param googleAddress
+     * @return - return Address - the Customer Address (list of full addresses and corresponding list of types of addresses)
+     */
     private Address mapGoogleAddressToAddress(GoogleReverseGeocodingResponse googleAddress) {
         Address address = new Address();
         address.setAddresses(googleAddress.getResults().stream().map(element -> new AddressDetails(
@@ -82,6 +102,11 @@ public class CustomerServicesImpl implements CustomerServices {
         return address;
     }
 
+    /**
+     * Finds one customer, from within the Iterable, who's coordinates are closest to the specified Customer
+     * It looks at the relative distance between both Customers coordenates
+     * @return Customer - the distinct customer from within the Iterable, who's coordenates are closest to the specified customer
+     */
     @Override
     public Customer findClosestCustomer(Customer customer,
             Iterable<Customer> customers) {

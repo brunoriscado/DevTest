@@ -124,8 +124,11 @@ public class Main {
         loader.writeCustomers(customers);
     }
 
+    /**
+     * Loads configuration from property files into Main class TaskResource annotated Fields
+     * @throws Exception
+     */
     public static void loadConfig() throws Exception {
-        Field fld = null;
         try (FileInputStream fis = new FileInputStream(ModelLoaderImpl.class.getClassLoader().getResource(APP_PROPS_FILE).getFile());) {
             props = new Properties();
             props.load(fis);

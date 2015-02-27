@@ -39,6 +39,12 @@ public class ModelLoaderImpl implements ModelLoader {
         return instance;
     }
 
+
+    /**
+     * Loads data from the input json file, and deserializes it into an Iterable of Customers
+     * Using GSON dependency to handle the deserialization
+     * @return Iterable<Customer> - json data in object format
+     */
     @Override
     public Iterable<Customer> loadCustomers() {
         Iterable<Customer> customers = null;
@@ -55,6 +61,11 @@ public class ModelLoaderImpl implements ModelLoader {
         return customers;
     }
 
+    /**
+     * This method serializes an Iterable of Customer, into a JSON flat file
+     * Using GSON dependency to handle the serialization
+     * @return int - the result flag for the operation
+     */
     @Override
     public int writeCustomers(Iterable<Customer> customers) {
         File output = new File(outputFile);

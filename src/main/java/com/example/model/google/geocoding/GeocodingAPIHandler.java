@@ -21,6 +21,13 @@ public class GeocodingAPIHandler {
         this.addressLookupURL = addressLookupURL;
     }
 
+    /**
+     * This method performs an address lookup via a https request to google's reverse geocoding api
+     * It uses the latitude and longitude coordinates to determine a list of possible addresses
+     * @param latitude
+     * @param longitude
+     * @return GoogleReverseGeocodingResponse - this represents a reverse geocoding address lookup from google
+     */
     public GoogleReverseGeocodingResponse getAddress(double latitude, double longitude) {
         GoogleReverseGeocodingResponse response = null;
         String coordenatesURL = addressLookupURL.replaceAll("\\{lat\\}", String.valueOf(latitude))
