@@ -68,6 +68,7 @@ public class Main {
 
         //3 - Output all email addresses sorted alphabetically in ascending order
         customerServices = CustomerServicesImpl.getInstance(addressLookupURL);
+        System.out.println("**********************************\n");
         customerServices.getCustomersOrderedByEmail(customers, SortOrder.ASC)
                 .forEach(customer -> System.out.println(
                         "First name: " + customer.getName().getFirst() + " | " +
@@ -114,7 +115,8 @@ public class Main {
         executorService.shutdown();
 
         Collections.sort(closestCustomerDistances);
-        System.out.println("The closest customers are:\n" +
+        System.out.println("**********************************\n" +
+                "The closest customers are:\n" +
                 "Customer ID: " + closestCustomerDistances.get(0).getCustomer1().get_id() + " (latitude: " + closestCustomerDistances.get(0).getCustomer1().getLatitude() +
                 " and longitude: " + closestCustomerDistances.get(0).getCustomer1().getLongitude() + ")\n" +
                 "Customer ID: " + closestCustomerDistances.get(0).getCustomer2().get_id() + " (latitude: " + closestCustomerDistances.get(0).getCustomer2().getLatitude() +
