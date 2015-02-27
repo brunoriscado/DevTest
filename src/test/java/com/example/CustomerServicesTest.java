@@ -51,6 +51,18 @@ public class CustomerServicesTest {
         Iterable<Customer> customers = loader.loadCustomers();
         Customer result = customerServices.findClosestCustomer(customer, customers);
         assertTrue(expected_id.equals(result.get_id()));
+        customer.setLatitude(48.490681);
+        customer.setLongitude(123.389058);
+        result = customerServices.findClosestCustomer(customer, customers);
+        assertTrue(expected_id.equals(result.get_id()));
+        customer.setLatitude(-48.490681);
+        customer.setLongitude(-123.389058);
+        result = customerServices.findClosestCustomer(customer, customers);
+        assertTrue(expected_id.equals(result.get_id()));
+        customer.setLatitude(-48.490681);
+        customer.setLongitude(123.389058);
+        result = customerServices.findClosestCustomer(customer, customers);
+        assertTrue(expected_id.equals(result.get_id()));
     }
 
     @Test
