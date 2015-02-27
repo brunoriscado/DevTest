@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import com.example.model.Customer;
 import com.example.model.EyeColour;
 import com.example.model.SortOrder;
 import com.example.model.annotations.TaskResource;
+import com.example.model.workers.ClosestCustomersWorker.CustomerPairDistance;
+import com.example.model.workers.ClosestCustomersWorker;
 import com.example.model.workers.CustomerAddressWorker;
 import com.example.operations.DataOperations;
 import com.example.services.CustomerServices;
@@ -89,9 +92,33 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        executorService.shutdown();
 
         //5 - Using the above ExecutorService or other form of concurrency, determine which 2 Customers live closest to each other.
+        iterator = customers.iterator();
+        List<Future<CustomerPairDistance>> futuresCustomerPairs = new ArrayList<Future<CustomerPairDistance>>();
+        List<CustomerPairDistance> closestCustomerDistances = new ArrayList<ClosestCustomersWorker.CustomerPairDistance>();
+        while (iterator.hasNext()) {
+            futuresCustomerPairs.add(executorService.submit(new ClosestCustomersWorker(customerServices, iterator.next(), customers)));
+        }
+
+        for (Future<CustomerPairDistance> future : futuresCustomerPairs) {
+            try {
+                closestCustomerDistances.add(future.get());
+            } catch (InterruptedException e) {
+                LOGGER.log(Level.WARNING, "Address worker Interrupted");
+            } catch (ExecutionException e) {
+                LOGGER.log(Level.WARNING, "Error fetching Address for user");
+                e.printStackTrace();
+            }
+        }
+        executorService.shutdown();
+
+        Collections.sort(closestCustomerDistances);
+        System.out.println("The closest customers are:\n" +
+                "Customer ID: " + closestCustomerDistances.get(0).getCustomer1().get_id() + " (latitude: " + closestCustomerDistances.get(0).getCustomer1().getLatitude() +
+                " and longitude: " + closestCustomerDistances.get(0).getCustomer1().getLongitude() + ")\n" +
+                "Customer ID: " + closestCustomerDistances.get(0).getCustomer2().get_id() + " (latitude: " + closestCustomerDistances.get(0).getCustomer2().getLatitude() +
+                " and longitude: " + closestCustomerDistances.get(0).getCustomer2().getLongitude() + ")");
 
         //6 - Using the ModuleLoader, write the Customer list back to JSON, including the new Address information
         loader.writeCustomers(customers);

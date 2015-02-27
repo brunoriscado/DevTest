@@ -1,6 +1,7 @@
 package com.example.services;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,7 +48,7 @@ public class CustomerServicesImpl implements CustomerServices {
     public SortedSet<Customer> getCustomersOrderedByEmail(
             Iterable<Customer> customers, SortOrder sortOrder) {
         SortedSet<Customer> customersSortedByEmail = null;
-        Comparator<Customer> comparator = null; 
+        Comparator<Customer> comparator = null;
         switch(sortOrder) {
             case ASC:
                 comparator = (e1, e2) -> e1.getEmail().compareTo(e2.getEmail());
@@ -84,8 +85,28 @@ public class CustomerServicesImpl implements CustomerServices {
     @Override
     public Customer findClosestCustomer(Customer customer,
             Iterable<Customer> customers) {
-        // TODO Auto-generated method stub
-        return null;
+        Customer closestCustomer = null;
+        Customer nextCustomer = null;
+        double distance = 0.0;
+        Iterator<Customer> iterator = customers.iterator();
+        while (iterator.hasNext()) {
+            nextCustomer = iterator.next();
+            if (!nextCustomer.equals(customer)) {
+                closestCustomer = nextCustomer;
+                distance = Util.getDistance(customer.getLatitude(), customer.getLongitude(),
+                        closestCustomer.getLatitude(), closestCustomer.getLongitude());
+                break;
+            }
+        }
+        while (iterator.hasNext()) {
+            nextCustomer = iterator.next();
+            double auxDistance = Util.getDistance(customer.getLatitude(), customer.getLongitude(),
+                    nextCustomer.getLatitude(), nextCustomer.getLongitude()); 
+            if (!nextCustomer.equals(customer) && auxDistance < distance) {
+                distance = auxDistance;
+                closestCustomer = nextCustomer;
+            }
+        }
+        return closestCustomer;
     }
-
 }
