@@ -64,16 +64,18 @@ public class Main {
         DataOperations ops = new DataOperations();
         Map<EyeColour, Long> eyeColourAggregation = ops.aggregateEyeColours(customers);
         EyeColour highestTrend = ops.getHighestTrend(eyeColourAggregation);
-        System.out.println("The most popular eye colour is: " + highestTrend.getColour());
+        System.out.println("**********************************\nThe most popular eye colour is: "
+                + highestTrend.getColour());
 
         //3 - Output all email addresses sorted alphabetically in ascending order
         customerServices = CustomerServicesImpl.getInstance(addressLookupURL);
-        System.out.println("**********************************\n");
+        System.out.println("\n**********************************\n");
         customerServices.getCustomersOrderedByEmail(customers, SortOrder.ASC)
                 .forEach(customer -> System.out.println(
                         "First name: " + customer.getName().getFirst() + " | " +
                         "Last name: " + customer.getName().getLast() + " | " +
                         "Email Address: " + customer.getEmail()));
+        System.out.println("\n**********************************\n");
 
         //4 - Using the above ExecutorService or other form of concurrency, populate the Address field of each customer.
         //    As this is a long running task, we expect some form of parallelism.
