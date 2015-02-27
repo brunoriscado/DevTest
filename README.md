@@ -6,7 +6,7 @@ Notes on the task:
 
 - GSON dependency was added, to handle deserialization/serialization of JSON data
 
-- Input, output and google reverse Geocoding API properties can be setup in the app.properties file under resources
+- Input, output and google reverse Geocoding API properties can be setup in the application.properties file under resources
 
 - Unit tests for the CustomerServices have been created under src/test/java
 
