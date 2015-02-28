@@ -107,9 +107,9 @@ public class Main {
             try {
                 closestCustomerDistances.add(future.get());
             } catch (InterruptedException e) {
-                LOGGER.log(Level.WARNING, "Address worker Interrupted");
+                LOGGER.log(Level.WARNING, "Closeness worker Interrupted");
             } catch (ExecutionException e) {
-                LOGGER.log(Level.WARNING, "Error fetching Address for user");
+                LOGGER.log(Level.WARNING, "Error fetching Closest user");
                 e.printStackTrace();
             }
         }
