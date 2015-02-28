@@ -37,7 +37,6 @@ public class Main {
     private static CustomerServices customerServices = null;
     private static ModelLoader loader = null;
     private static ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-    private static final String APP_PROPS_FILE = "application.properties";
     private static Properties props;
 
     @TaskResource
@@ -126,6 +125,7 @@ public class Main {
 
         //6 - Using the ModuleLoader, write the Customer list back to JSON, including the new Address information
         loader.writeCustomers(customers);
+        System.exit(0);
     }
 
     /**
